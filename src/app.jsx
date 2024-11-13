@@ -1,7 +1,7 @@
 import './app.css'
 import React from "jsx-dom"
 
-const app = () => {
+const app = async () => {
     const name = 'Foo'
     return (
         <h1 class="text-xl text-center mt-8">
@@ -10,7 +10,7 @@ const app = () => {
     )
 }
 
-document.body.appendChild(app())
+app().then((app) => { document.body.appendChild(app) })
 
 // enables automatic live reload of the page in browser
 // https://esbuild.github.io/api/#live-reload
