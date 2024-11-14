@@ -3,7 +3,7 @@ import { tailwindPlugin } from 'esbuild-plugin-tailwindcss';
 
 // https://esbuild.github.io/api/#live-reload
 let ctx = await esbuild.context({
-    entryPoints: ['src/app.jsx'],
+    entryPoints: ['src/app.tsx'],
     bundle: true,
     //   minify: true,
     //   sourcemap: true,
