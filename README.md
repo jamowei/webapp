@@ -11,8 +11,14 @@ After installing the dependencies with
 ```
 npm install
 ```
-Run the app with
+Build and serve the app with
 ```
-node esbuild.mjs
+node build.mjs serve
 ```
 All output-files are inside the `dist` folder, which you can see in the browser by navigating to [http://0.0.0.0:8000/](http://0.0.0.0:8000/).
+
+## Build
+Build a minified version for production use with
+```
+node build.mjs
+```
