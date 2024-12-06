@@ -28,10 +28,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set environment variables
+      - name: Set up Name and Version
         run: |
-          echo "NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-          echo "VERSION=${GITHUB_REF_NAME#*/}" >> $GITHUB_ENV
+          NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
+          VERSION=${GITHUB_REF_NAME#*/}
+          echo "NAME=${NAME}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo Using name=$NAME and version=$VERSION
 
       - name: Set up Node.js
