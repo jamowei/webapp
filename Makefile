@@ -13,14 +13,22 @@ serve:
 	npm install
 	node build.mjs serve
 
-run: build
+docker_run: build
 	@docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest > /dev/null
 	@docker container ls
-	@echo "🚀 - Running at http://localhost:${PORT}/"
+	@echo "🚀 - Container '${NAME}' started. Running at http://localhost:${PORT}/"
 
-stop:
+docker_stop:
 	@docker container stop ${NAME} > /dev/null
 	@echo "☠️ - Container '${NAME}' stopped"
+
+helm_install:
+	@helm upgrade --install --wait --create-namespace --namespace ${NAME} ${NAME} ./helm
+	@echo "☸️ - Helm Release '${NAME}' deployed"
+
+helm_uninstall:
+	@helm uninstall --namespace ${NAME} ${NAME}
+	@echo "☸️ - Helm Release '${NAME}' uninstalled"
 
 release:
 ifeq ($(strip $(version)),)
@@ -31,7 +39,7 @@ else
 	@echo 🎉 - Release $(version) created $$(git config --get remote.origin.url)
 endif
 
-delete_release:
+release_delete:
 ifeq ($(strip $(version)),)
 	@echo usage: make delete_release version=v1.0
 else

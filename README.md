@@ -8,11 +8,12 @@ Simple WebApp (SPA) using [esbuild](https://esbuild.github.io/), [jsx-dom](https
 # 📑 Requirements
 * [NodeJS](https://nodejs.org/) or similar javascript engine
 * [Docker](https://www.docker.com/) or similar container engine
+* [Helm](https://helm.sh/) for deploying to [Kubernetes](https://kubernetes.io/)
 
 # 🏗️ Structure
-All source-files for the app resides in `src` folder. 
-Where the `src/main/app.jsx` file is your main entry point for `esbuild`.
-Any custom css goes into the `app.css` file and any static resource (e.g. html, ico, etc.) goes into the `src/resource` folder. That's all! 😉
+All source-files for the app resides in `./src` folder. 
+Where the `./src/main/app.jsx` file is your main entry point for `esbuild`.
+Any custom css goes into the `app.css` file and any static resource (e.g. html, ico, etc.) goes into the `./src/resource` folder. That's all! 😉
 
 # 🛠️ Build App (for Production)
 Just run `make` or following commands
@@ -30,41 +31,53 @@ npm install
 node build.mjs serve
 ```
 
-# 🐋 Run Docker App
-Just run `make run` or following commands
+# 🐋 Docker
+## Run Docker Container
+Just run `make docker_run` or following command
 ```
 docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest
 ```
+Alternatively, you can also use `docker compose up` to start the container, by using the `./docker-compose.yaml`.
 
-Alternatively, you can also use `docker compose up` to start the container,
-by using the `docker-compose.yaml`.
-
-# 🐋 Stop Docker App
-Just run `make stop` or following commands
+## Stop Docker Container
+Just run `make docker_stop` or following command
 ```
 docker container stop ${NAME}
 ```
 
-# Run on Kubernetes with Helm
-There is also a helm chart provided under `./helm` directory.
+Or use `docker compose stop` to stop the container, when using the `./docker-compose.yaml`.
 
+# ☸️ Kubernetes
+## Run Kubernetes Pod
+There is a helm chart provided under `./helm` directory.
+
+Just run `make helm_install` or following command
+```
+helm upgrade --install --wait --create-namespace --namespace ${NAME} ${NAME} ./helm
+```
+
+## Stop Kubernetes Pod
+Just run `make helm_uninstall` or following command
+```
+helm uninstall --namespace ${NAME} ${NAME}
+```
 
 # ⚙️ Github Release + Package
-Whenever a commit gets pushed to the `main` branch a workflow gets triggered, which builds the app.
-When a commit gets tagged with `v*.*` notation (e.g. `v1.0`) the action created a Github release
-and push the Docker Image to the Github Container Registry (ghcr.oi).
+Whenever a new commit is pushed on the `main` branch or a pull request is created, the Github workflow gets triggered.
+The workflow (`./.github/workflows/buildAndRelease.yaml`) builds the app, Docker image and Helm chart.
 
-Just run `make release version=v1.0` or following commands
+To create a Github Release and publish the app, Docker image and Helm chart,
+you only have to tag the specific commit with `*.*.*` notation ([SemanticVersion](https://semver.org/)).
+
+Just run `make release version=1.0.0` or following commands
 ```
 git tag v1.0
 git push origin tag v1.0
 ```
 
 It is also possible to delete a release.
-Just run `make delete_release version=v1.0` or following commands
+Just run `make release_delete version=1.0.0` or following commands
 ```
 git tag -d v1.0
 git push --delete origin v1.0
 ```
-
-# ☸️ Kubernetes
