@@ -42,10 +42,20 @@ Just run `make stop` or following commands
 docker container stop ${NAME}
 ```
 
-# ⚙️ Github Action
+# ⚙️ Github Release + Package
 Whenever a commit gets pushed to the `main` branch a workflow gets triggered, which builds the app.
-You can create a Github release by tagging a specific commit with `v*.*` and push it to the repository.
+When a commit gets tagged with `v*.*` notation (e.g. `v1.0`) the action created a Github release
+and push the Docker Image to the Github Container Registry (ghcr.oi).
+
+Just run `make release version=v1.0` or following commands
 ```
 git tag v1.0
 git push origin tag v1.0
+```
+
+It is also possible to delete a release.
+Just run `make delete_release version=v1.0` or following commands
+```
+git tag -d v1.0
+git push --delete origin v1.0
 ```
