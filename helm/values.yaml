@@ -77,11 +77,11 @@ resources:
 livenessProbe:
   httpGet:
     path: /
-    port: { service.port }
+    port: http
 readinessProbe:
   httpGet:
     path: /
-    port: { service.port }
+    port: http
 
 nodeSelector: {}
 
