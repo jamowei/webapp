@@ -36,11 +36,18 @@ Just run `make run` or following commands
 docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest
 ```
 
+Alternatively, you can also use `docker compose up` to start the container,
+by using the `docker-compose.yaml`.
+
 # 🐋 Stop Docker App
 Just run `make stop` or following commands
 ```
 docker container stop ${NAME}
 ```
+
+# Run on Kubernetes with Helm
+There is also a helm chart provided under `./helm` directory.
+
 
 # ⚙️ Github Release + Package
 Whenever a commit gets pushed to the `main` branch a workflow gets triggered, which builds the app.
@@ -59,3 +66,5 @@ Just run `make delete_release version=v1.0` or following commands
 git tag -d v1.0
 git push --delete origin v1.0
 ```
+
+# ☸️ Kubernetes
