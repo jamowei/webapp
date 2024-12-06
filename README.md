@@ -47,6 +47,12 @@ docker container stop ${NAME}
 
 Or use `docker compose stop` to stop the container, when using the `./docker-compose.yaml`.
 
+## Docker Image Cleanup
+Just run `make docker_clean` or following command
+```
+docker image prune
+```
+
 # ☸️ Kubernetes
 ## Run Kubernetes Pod
 There is a helm chart provided under `./helm` directory.

@@ -22,6 +22,10 @@ docker_stop:
 	@docker container stop ${NAME} > /dev/null
 	@echo "☠️ - Container '${NAME}' stopped"
 
+docker_clean:
+	@docker image prune -f
+	@echo "🧹 - Docker Images cleaned"
+
 helm_install:
 	@helm upgrade --install --wait --create-namespace --namespace ${NAME} ${NAME} ./helm
 	@echo "☸️ - Helm Release '${NAME}' deployed"
