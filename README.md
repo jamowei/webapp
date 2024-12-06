@@ -1,24 +1,46 @@
 # spa-simple
 Simple SPA using [esbuild](https://esbuild.github.io/), [jsx-dom](https://www.npmjs.com/package/jsx-dom) and [tailwindcss](https://www.npmjs.com/package/tailwindcss)
 
-## Overview
-All source-files for the app resides in `src` folder. 
-Where the `app.jsx` file is your main entry point.
-Any custom css goes into the `app.css` file. That's all.
+# Requirements
+* [NodeJS](https://nodejs.org/) or similar javascript engine
+* [Docker](https://www.docker.com/) or similar container engine
 
-## Getting Started
-After installing the dependencies with
+# Development
+All source-files for the app resides in `src` folder. 
+Where the `src/main/app.jsx` file is your main entry point for `esbuild`.
+Any custom css goes into the `app.css` file and any static resource (e.g. html, ico, etc.) goes into the `src/resource` folder. That's all! 🙂
+
+# Build App (for Production)
+Just run `make` or following commands
 ```
 npm install
+node build.mjs
+docker build -t ${NAME}:latest .
 ```
-Build and serve the app with
+
+# Serve App (for Development)
+Just run `make serve` or following commands
 ```
+npm install
 node build.mjs serve
 ```
-All output-files are inside the `dist` folder, which you can see in the browser by navigating to [http://0.0.0.0:8000/](http://0.0.0.0:8000/).
 
-## Build
-Build a minified version for production use with
+# Run Docker App
+Just run `make run` or following commands
 ```
-node build.mjs
+docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest
+```
+
+# Stop Docker App
+Just run `make stop` or following commands
+```
+docker container stop ${NAME}
+```
+
+# Github Action
+Whenever a commit gets pushed to the `main` branch a workflow gets triggered, which builds the app.
+You can create a Github release by tagging a specific commit with `v*.*` and push it to the repository.
+```
+git tag v1.0
+git push origin tag v1.0
 ```
