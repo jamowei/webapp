@@ -57,12 +57,13 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/v')
         with:
-          name: Release $VERSION
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
           #body_path: CHANGELOG.md
           files: |
             *.zip
+            *.tgz
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
