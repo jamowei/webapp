@@ -2,8 +2,8 @@
 ![GitHub Release](https://img.shields.io/github/v/release/jamowei/spa-simple)
 
 
-# 😎 SPA made simple
-Simple SPA using [esbuild](https://esbuild.github.io/), [jsx-dom](https://www.npmjs.com/package/jsx-dom) and [tailwindcss](https://www.npmjs.com/package/tailwindcss)
+# 😎 WebApp made simple
+Simple WebApp (SPA) using [esbuild](https://esbuild.github.io/), [jsx-dom](https://www.npmjs.com/package/jsx-dom) and [tailwindcss](https://www.npmjs.com/package/tailwindcss)
 
 # 📑 Requirements
 * [NodeJS](https://nodejs.org/) or similar javascript engine

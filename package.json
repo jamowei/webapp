@@ -1,5 +1,5 @@
 {
-  "name": "simple-spa",
+  "name": "webapp",
   "version": "1.0.0",
   "main": "",
   "scripts": {
@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamowei/simple-spa.git"
+    "url": "git+https://github.com/jamowei/webapp.git"
   },
   "author": "jamowei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jamowei/simple-spa/issues"
+    "url": "https://github.com/jamowei/webapp/issues"
   },
-  "homepage": "https://github.com/jamowei/simple-spa#readme",
+  "homepage": "https://github.com/jamowei/webapp#readme",
   "description": "",
   "devDependencies": {
     "esbuild": "0.24.0",
