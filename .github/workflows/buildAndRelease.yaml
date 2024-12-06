@@ -35,9 +35,11 @@ jobs:
 
       - name: Zip the out directory
         if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          REPO_NAME: ${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
         run: |
           cd out
-          zip -r ../${{ github.repository }}-${{ github.ref_name }}.zip *
+          zip -r ../${REPO_NAME}-${{ github.ref_name }}.zip *
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -48,7 +50,7 @@ jobs:
           prerelease: false
           #body_path: CHANGELOG.md
           files: |
-            ${{ github.repository }}-${{ github.ref_name }}.zip
+            *.zip
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
