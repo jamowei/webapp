@@ -21,7 +21,7 @@ npm install
 node build.mjs
 docker build -t ${NAME}:latest .
 ```
-Docker Image size is `~177 kb`! 🤯
+Docker image size is `~114 kB`! 🤯
 
 # 💻 Serve App (for Development)
 Just run `make serve` or following commands

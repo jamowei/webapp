@@ -7,7 +7,7 @@ build:
 	npm install
 	node build.mjs
 	docker build -t ${NAME}:latest .
-	@echo "🛠️ Docker build successful"
+	@echo "🛠️ - Docker build successful"
 
 serve:
 	npm install
@@ -15,11 +15,12 @@ serve:
 
 run: build
 	@docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest > /dev/null
-	@echo "🚀 Serving at http://localhost:${PORT}/"
+	@docker container ls
+	@echo "🚀 - Running at http://localhost:${PORT}/"
 
 stop:
 	@docker container stop ${NAME} > /dev/null
-	@echo "☠️ Container ${NAME} stopped"
+	@echo "☠️ - Container '${NAME}' stopped"
 
 release:
 ifeq ($(strip $(version)),)
@@ -27,6 +28,7 @@ ifeq ($(strip $(version)),)
 else
 	@git tag $(version)
 	git push origin tag $(version)
+	@echo 🎉 - Release $(version) created $$(git config --get remote.origin.url)
 endif
 
 delete_release:
@@ -35,4 +37,5 @@ ifeq ($(strip $(version)),)
 else
 	@git tag -d $(version)
 	git push --delete origin $(version)
+	@echo ❌ - Release $(version) deleted $$(git config --get remote.origin.url)
 endif
