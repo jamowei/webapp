@@ -1,6 +1,7 @@
 PORT?=3000
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 NAME := $(notdir $(patsubst %/,%,$(dir $(MKFILE_PATH))))
+ARGS = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 
 build:
 	npm install
@@ -19,3 +20,19 @@ run: build
 stop:
 	@docker container stop ${NAME} > /dev/null
 	@echo "☠️ Container ${NAME} stopped"
+
+release:
+ifeq ($(strip $(version)),)
+	@echo usage: make release version=v1.0
+else
+	@echo git tag $(version)
+	git push origin tag $(version)
+endif
+
+delete_release:
+ifeq ($(strip $(version)),)
+	@echo usage: make delete_release version=v1.0
+else
+	@git tag -d $(version)
+	git push --delete origin $(version)
+endif
