@@ -25,7 +25,7 @@ release:
 ifeq ($(strip $(version)),)
 	@echo usage: make release version=v1.0
 else
-	@echo git tag $(version)
+	@git tag $(version)
 	git push origin tag $(version)
 endif
 
