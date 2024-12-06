@@ -1,3 +1,7 @@
+![build](https://github.com/jamowei/spa-simple/actions/workflows/buildAndRelease.yaml/badge.svg)
+![GitHub Release](https://img.shields.io/github/v/release/jamowei/spa-simple)
+
+
 # spa-simple
 Simple SPA using [esbuild](https://esbuild.github.io/), [jsx-dom](https://www.npmjs.com/package/jsx-dom) and [tailwindcss](https://www.npmjs.com/package/tailwindcss)
 
