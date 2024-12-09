@@ -6,12 +6,13 @@ ARGS = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 build:
 	npm install
 	node build.mjs
-	docker build -t ${NAME}:latest .
-	@echo "🛠️ - Docker build successful"
 
 serve:
-	npm install
 	node build.mjs serve
+
+docker_build:
+	docker build -t ${NAME}:latest .
+	@echo "🛠️ - Docker build successful"
 
 docker_run: build
 	@docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest > /dev/null

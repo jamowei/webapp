@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "",
   "scripts": {
-    "serve": "node esbuild.mjs"
+    "build": "node esbuild.mjs"
   },
   "repository": {
     "type": "git",

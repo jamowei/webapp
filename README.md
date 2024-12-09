@@ -2,12 +2,12 @@
 ![GitHub Release](https://img.shields.io/github/v/release/jamowei/spa-simple)
 
 
-# 😎 WebApp made simple
+# 😎 WebApp made simple 🎉
 Simple WebApp (SPA) using [esbuild](https://esbuild.github.io/), [jsx-dom](https://www.npmjs.com/package/jsx-dom) and [tailwindcss](https://www.npmjs.com/package/tailwindcss)
 
 # 📑 Requirements
-* [NodeJS](https://nodejs.org/) or similar javascript engine
-* [Docker](https://www.docker.com/) or similar container engine
+* [Docker](https://www.docker.com/) for building the image
+* [NodeJS](https://nodejs.org/) for developing the webapp
 * [Helm](https://helm.sh/) for deploying to [Kubernetes](https://kubernetes.io/)
 
 # 🏗️ Structure
@@ -15,31 +15,36 @@ All source-files for the app resides in `./src` folder.
 Where the `./src/main/app.jsx` file is your main entry point for `esbuild`.
 Any custom css goes into the `app.css` file and any static resource (e.g. html, ico, etc.) goes into the `./src/resource` folder. That's all! 😉
 
-# 🛠️ Build App (for Production)
+# 💻 Development
 Just run `make` or following commands
 ```
 npm install
 node build.mjs
-docker build -t ${NAME}:latest .
 ```
-Docker image size is `~114 kB`! 🤯
+This produces all files for the browser inside the `out` folder.
 
-# 💻 Serve App (for Development)
-Just run `make serve` or following commands
+If you want to enable [live-reload](https://esbuild.github.io/api/#live-reload),
+just run `make serve` or
 ```
-npm install
 node build.mjs serve
 ```
 
 # 🐋 Docker
-## Run Docker Container
+## 🐋 Build 🛠️
+Just run `make docker_build` or following commands
+```
+docker build -t ${NAME}:latest .
+```
+Docker image size is `~112 kB`! 🤯
+
+## 🐋 Run
 Just run `make docker_run` or following command
 ```
 docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest
 ```
 Alternatively, you can also use `docker compose up` to start the container, by using the `./docker-compose.yaml`.
 
-## Stop Docker Container
+## 🐋 Stop
 Just run `make docker_stop` or following command
 ```
 docker container stop ${NAME}
@@ -47,14 +52,14 @@ docker container stop ${NAME}
 
 Or use `docker compose stop` to stop the container, when using the `./docker-compose.yaml`.
 
-## Docker Image Cleanup
+## 🐋 Cleanup 🧹
 Just run `make docker_clean` or following command
 ```
 docker image prune
 ```
 
 # ☸️ Kubernetes
-## Run Kubernetes Pod
+## ☸️ Install
 There is a helm chart provided under `./helm` directory.
 
 Just run `make helm_install` or following command
@@ -62,7 +67,7 @@ Just run `make helm_install` or following command
 helm upgrade --install --wait --create-namespace --namespace ${NAME} ${NAME} ./helm
 ```
 
-## Stop Kubernetes Pod
+## ☸️ Uninstall
 Just run `make helm_uninstall` or following command
 ```
 helm uninstall --namespace ${NAME} ${NAME}

@@ -1,13 +1,28 @@
+ARG NODE_VERSION=22
+ARG BUSYBOX_VERSION=1.36.1
 ARG ALPINE_VERSION=3.20
 
-FROM alpine:${ALPINE_VERSION} AS builder
+#################################################################
+####################### NodeJs ##################################
+#################################################################
+FROM node:${NODE_VERSION}-alpine as webapp
 
-ARG BUSYBOX_VERSION=1.36.1
+
+COPY . /webapp
+WORKDIR /webapp
+
+RUN npm install && node build.mjs
+
+##################################################################
+####################### HTTPD ####################################
+##################################################################
+FROM alpine:${ALPINE_VERSION} AS webserver
 
 # Install all dependencies required for compiling busybox
 RUN apk add gcc musl-dev make perl
 
 # Download busybox sources
+ARG BUSYBOX_VERSION
 RUN wget https://busybox.net/downloads/busybox-${BUSYBOX_VERSION}.tar.bz2 \
   && tar xf busybox-${BUSYBOX_VERSION}.tar.bz2 \
   && mv /busybox-${BUSYBOX_VERSION} /busybox
@@ -23,26 +38,25 @@ RUN make && ./make_single_applets.sh
 # Create a non-root user to own the files and run our server
 RUN adduser -D static
 
-# Switch to the scratch image
+##################################################################
+####################### WebApp ###################################
+##################################################################
 FROM scratch
 
 # Copy over the user
-COPY --from=builder /etc/passwd /etc/passwd
-
-# Copy the static binary
-COPY --from=builder /busybox/busybox_HTTPD /httpd
+COPY --from=webserver /etc/passwd /etc/passwd
 
 # Use our non-root user
 USER static
 WORKDIR /home/static
 
-# Copy the static website
-# Use the .dockerignore file to control what ends up inside the image!
-# NOTE: Commented out since this will also copy the .config file
-COPY out .
+# Copy webserver files
+COPY --from=webserver --chown=static /busybox/busybox_HTTPD httpd
+# Copy webapp files
+COPY --from=webapp --chown=static /webapp/out .
 
 # port httpd runs on
 EXPOSE 3000
 
 # Run busybox httpd
-CMD ["/httpd", "-f", "-p", "3000"]
+CMD ["/home/static/httpd", "-f", "-p", "3000"]

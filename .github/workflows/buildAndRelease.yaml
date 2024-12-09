@@ -36,32 +36,18 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo Using name=$NAME and version=$VERSION
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-
-      - name: Set up Helm
-        uses: azure/setup-helm@v4.2.0
-
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
-
-      - name: Install Npm dependencies
-        run: npm install
-
-      - name: Run build script
-        run: node build.mjs
-
-      - name: Build Web app
-        run: |
-          cd out
-          zip -r ../$NAME-$VERSION.zip *
-
-      - name: Build Helm package
-        run: helm package ./helm
-
+      
+      - name: Set up Helm
+        uses: azure/setup-helm@v4.2.0
+        
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/$NAME:$VERSION .
+        
+      - name: Build Helm package
+        run: helm package ./helm
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -72,7 +58,6 @@ jobs:
           prerelease: false
           #body_path: CHANGELOG.md
           files: |
-            *.zip
             *.tgz
 
       - name: Log in to GitHub Container Registry
