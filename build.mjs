@@ -40,16 +40,10 @@ if (serve) {
       console.error('Error reading resource directory:', err);
       return;
     }
-
     files.forEach((file) => {
       const sourceFile = path.join(sourceDir, file);
       const targetFile = path.join(targetDir, file);
-
-      fs.copyFile(sourceFile, targetFile, (err) => {
-        if (err) {
-          console.error('Error copying resource file:', err);
-        }
-      });
+      fs.cpSync(sourceFile, targetFile, { recursive: true });
     });
   });
 })(resDir, outDir);
