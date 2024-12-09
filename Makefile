@@ -37,7 +37,7 @@ helm_uninstall:
 
 release:
 ifeq ($(strip $(version)),)
-	@echo usage: make release version=v1.0
+	@echo usage: make release version=1.0.0
 else
 	@git tag $(version)
 	git push origin tag $(version)
@@ -46,7 +46,7 @@ endif
 
 release_delete:
 ifeq ($(strip $(version)),)
-	@echo usage: make delete_release version=v1.0
+	@echo usage: make delete_release version=1.0.0
 else
 	@git tag -d $(version)
 	git push --delete origin $(version)

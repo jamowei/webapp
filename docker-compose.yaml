@@ -1,6 +1,6 @@
 services:
   webapp:
-    image: ghcr.io/jamowei/webapp:v1.0.0
+    image: ghcr.io/jamowei/webapp:1.0.0
     container_name: webapp
     ports:
       - 3000:3000
