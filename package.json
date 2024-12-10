@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamowei/webapp.git"
+    "url": "git+https://github.com/jamowei/myapp.git"
   },
   "author": "jamowei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jamowei/webapp/issues"
+    "url": "https://github.com/jamowei/myapp/issues"
   },
-  "homepage": "https://github.com/jamowei/webapp#readme",
+  "homepage": "https://github.com/jamowei/myapp#readme",
   "description": "",
   "devDependencies": {
     "esbuild": "0.24.0",
