@@ -6,9 +6,9 @@
 Simple WebApp (SPA) using [esbuild](https://esbuild.github.io/), [jsx-dom](https://www.npmjs.com/package/jsx-dom) and [tailwindcss](https://www.npmjs.com/package/tailwindcss)
 
 # 📑 Requirements
-* [Docker](https://www.docker.com/) for building the image
 * [NodeJS](https://nodejs.org/) for developing the webapp
-* [Helm](https://helm.sh/) for deploying to [Kubernetes](https://kubernetes.io/)
+* [Docker](https://www.docker.com/) for building the image
+* [kubectl](https://kubernetes.io/de/docs/reference/kubectl/) for deploying to [Kubernetes](https://kubernetes.io/)
 
 # 🏗️ Structure
 All source-files for the app resides in the `./src` folder.
@@ -91,9 +91,9 @@ kubectl delete -f out/${NAME}.k8s.yaml --namespace $(namespace)
 
 # ⚙️ Github Release + Package
 Whenever a new commit is pushed on the `main` branch or a pull request is created, the Github workflow gets triggered.
-The workflow (`./.github/workflows/buildAndRelease.yaml`) builds the app, Docker image and Helm chart.
+The workflow (`./.github/workflows/buildAndRelease.yaml`) builds the app, Docker image and Kubernetes manifest.
 
-To create a Github Release and publish the app, Docker image and Helm chart,
+To create a Github Release and publish the app, Docker image and Kubernetes manifest,
 you only have to tag the specific commit with `*.*.*` notation ([SemanticVersion](https://semver.org/)).
 
 Just run `make release version=1.0.0` or following commands
