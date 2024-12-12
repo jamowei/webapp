@@ -11,12 +11,21 @@ Simple WebApp (SPA) using [esbuild](https://esbuild.github.io/), [jsx-dom](https
 * [Helm](https://helm.sh/) for deploying to [Kubernetes](https://kubernetes.io/)
 
 # 🏗️ Structure
-All source-files for the app resides in `./src` folder. 
-Where the `./src/main/app.jsx` file is your main entry point for `esbuild`.
-Any custom css goes into the `app.css` file and any static resource (e.g. html, ico, etc.) goes into the `./src/resource` folder. That's all! 😉
+All source-files for the app resides in the `./src` folder.
+
+Where the `./src/main/app.jsx` file is your main entry point
+for your app which gets bundled via `esbuild`.
+Any custom css goes into the `./src/main/app.css` file and
+any static resources (e.g. html, images, etc.) goes into the `./src/resource` folder. 
+
+There is also a `./src/kubernetes/app.ts` file,
+which gets compiled to a kubernetes manifest.
+
+That's all! 😉
 
 # 💻 Development
-Just run `make` or following commands
+To bundle the app in `./src/main/app.tsx`
+just run `make` or following commands
 ```
 npm install
 node build.mjs
@@ -59,18 +68,25 @@ docker image prune
 ```
 
 # ☸️ Kubernetes
-## ☸️ Install
-There is a helm chart provided under `./helm` directory.
+## ☸️ Build 🛠️
+To bundle the kubernetes manifest in `./src/kubernetes/app.ts`
+just run `make k8s` or following commands
+```
+npm install
+node build.mjs k8s
+```
+This produces the yaml kubernetes manifest file inside the `out` folder.
 
-Just run `make helm_install` or following command
+## ☸️ Apply via kubectl
+Just run `make k8s_apply namespace=dev-test` ('namespace' is optional) or following command
 ```
-helm upgrade --install --wait --create-namespace --namespace ${NAME} ${NAME} ./helm
+kubectl apply -f out/${NAME}.k8s.yaml --namespace $(namespace)
 ```
 
-## ☸️ Uninstall
-Just run `make helm_uninstall` or following command
+## ☸️ Delete via kubectl
+Just run `make k8s_delete namespace=dev-test` ('namespace' is optional) or following command
 ```
-helm uninstall --namespace ${NAME} ${NAME}
+kubectl delete -f out/${NAME}.k8s.yaml --namespace $(namespace)
 ```
 
 # ⚙️ Github Release + Package

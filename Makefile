@@ -1,18 +1,20 @@
 PORT?=3000
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 NAME := $(notdir $(patsubst %/,%,$(dir $(MKFILE_PATH))))
-ARGS = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 
 build:
-	npm install
-	node build.mjs
+	@npm install
+	@node build.mjs
 
 serve:
 	node build.mjs serve
 
+k8s:
+	node build.mjs k8s
+
 docker_build:
 	docker build -t ${NAME}:latest .
-	@echo "🛠️ - Docker build successful"
+	@echo "🛠️  - Docker build successful"
 
 docker_run: build
 	@docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest > /dev/null
@@ -27,13 +29,19 @@ docker_clean:
 	@docker image prune -f
 	@echo "🧹 - Docker Images cleaned"
 
-helm_install:
-	@helm upgrade --install --wait --create-namespace --namespace ${NAME} ${NAME} ./helm
-	@echo "☸️ - Helm Release '${NAME}' deployed"
+k8s_apply: k8s
+ifeq ($(strip $(namespace)),)
+	kubectl apply -f out/${NAME}.k8s.yaml
+else
+	kubectl apply -f out/${NAME}.k8s.yaml --namespace $(namespace)
+endif
 
-helm_uninstall:
-	@helm uninstall --namespace ${NAME} ${NAME}
-	@echo "☸️ - Helm Release '${NAME}' uninstalled"
+k8s_delete:
+ifeq ($(strip $(namespace)),)
+	kubectl delete -f out/${NAME}.k8s.yaml
+else
+	kubectl delete -f out/${NAME}.k8s.yaml --namespace $(namespace)
+endif
 
 release:
 ifeq ($(strip $(version)),)

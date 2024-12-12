@@ -3,20 +3,20 @@ ARG BUSYBOX_VERSION=1.36.1
 ARG ALPINE_VERSION=3.20
 
 #################################################################
-####################### NodeJs ##################################
+####################### esbuild #################################
 #################################################################
-FROM node:${NODE_VERSION}-alpine as webapp
+FROM node:${NODE_VERSION}-alpine as esbuild
 
 
-COPY . /webapp
-WORKDIR /webapp
+COPY . /esbuild
+WORKDIR /esbuild
 
 RUN npm install && node build.mjs
 
 ##################################################################
-####################### HTTPD ####################################
+####################### httpd ####################################
 ##################################################################
-FROM alpine:${ALPINE_VERSION} AS webserver
+FROM alpine:${ALPINE_VERSION} AS httpd
 
 # Install all dependencies required for compiling busybox
 RUN apk add gcc musl-dev make perl
@@ -39,21 +39,21 @@ RUN make && ./make_single_applets.sh
 RUN adduser -D static
 
 ##################################################################
-####################### WebApp ###################################
+####################### main #####################################
 ##################################################################
 FROM scratch
 
 # Copy over the user
-COPY --from=webserver /etc/passwd /etc/passwd
+COPY --from=httpd /etc/passwd /etc/passwd
 
 # Use our non-root user
 USER static
 WORKDIR /home/static
 
-# Copy webserver files
-COPY --from=webserver --chown=static /busybox/busybox_HTTPD httpd
-# Copy webapp files
-COPY --from=webapp --chown=static /webapp/out .
+# Copy httpd files
+COPY --from=httpd --chown=static /busybox/busybox_HTTPD httpd
+# Copy esbuild files
+COPY --from=esbuild --chown=static /esbuild/out .
 
 # port httpd runs on
 EXPOSE 3000
