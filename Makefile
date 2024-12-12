@@ -12,6 +12,9 @@ serve:
 k8s:
 	node build.mjs k8s
 
+clean:
+	@rm -rf out
+
 docker_build:
 	docker build -t ${NAME}:latest .
 	@echo "🛠️  - Docker build successful"
