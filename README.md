@@ -19,7 +19,7 @@ Any custom css goes into the `./src/main/app.css` file and
 any static resources (e.g. html, images, etc.) goes into the `./src/resource` folder. 
 
 There is also a `./src/kubernetes/app.ts` file,
-which gets compiled to a kubernetes manifest.
+which gets compiled to a Kubernetes manifest YAML file.
 
 That's all! 😉
 
