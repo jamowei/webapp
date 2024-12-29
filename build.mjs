@@ -17,6 +17,7 @@ const mainDir = 'src/main';
 const kubernetesFile = 'app.ts';
 const kubernetesDir = 'src/kubernetes';
 const resourceDir = 'src/resources';
+const excludes = ['*.jpg', '*.png', '*.svg', '*.webp', '*.ttf'];
 const outputDir = 'out';
 const serve = process.argv[2] === 'serve';
 const kubernetes = process.argv[2] === 'k8s';
@@ -28,6 +29,7 @@ const mainConf = {
   minify: !serve,
   sourcemap: serve,
   plugins: [tailwindPlugin()],
+  external: excludes,
   outdir: outputDir,
 };
 

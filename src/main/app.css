@@ -3,3 +3,10 @@
 @import 'tailwindcss/utilities';
 
 /* custom styles here */
+
+@layer base {
+  @font-face {
+    font-family: 'Quicksand';
+    src: url(fonts/Quicksand.ttf) format('truetype');
+  }
+}
