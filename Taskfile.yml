@@ -1,0 +1,94 @@
+version: '3'
+
+env:
+  NAME: webapp
+  PORT: 3000
+
+dotenv: ['.env']
+
+tasks:
+  build:
+    desc: "Build webapp"
+    cmds:
+      - npm install
+      - node build.mjs
+
+  serve:
+    desc: "Serves webapp via dev-server"
+    cmds:
+      - node build.mjs serve
+
+  k8s:
+    desc: "Build Kubernetes manifest"
+    cmds:
+      - node build.mjs k8s
+
+  clean:
+    desc: "Clean output directory"
+    cmds:
+      - rm -rf out
+
+  docker-build:
+    desc: "Build Docker image"
+    cmds:
+      - docker build -t ${NAME}:latest .
+      - echo "🛠️  - Docker build successful"
+
+  docker-run:
+    desc: "Run Docker container"
+    deps: [build]
+    cmds:
+      - docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest > /dev/null
+      - docker container ls
+      - echo "🚀 - Container '${NAME}' started. Running at http://localhost:${PORT}/"
+
+  docker-stop:
+    desc: "Stop Docker container"
+    cmds:
+      - docker container stop ${NAME} > /dev/null
+      - echo "☠️ - Container '${NAME}' stopped"
+
+  docker-clean:
+    desc: "Clean unused Docker images"
+    cmds:
+      - docker image prune -f
+      - echo "🧹 - Docker Images cleaned"
+
+  k8s-apply:
+    desc: "Deploy to Kubernetes cluster"
+    deps: [k8s]
+    vars:
+      namespace: default
+    cmds:
+      - 'kubectl apply -f out/${NAME}.k8s.yaml -n {{.namespace}}'
+
+  k8s-delete:
+    desc: "Delete from Kubernetes cluster"
+    vars:
+      namespace: '{{.namespace| default "default"}}'
+    preconditions:
+      - 'kubectl get deploy ${NAME} -n {{.namespace}}'
+    cmds:
+      - kubectl delete -f out/${NAME}.k8s.yaml -n {{.namespace}}
+
+  release:
+    desc: "Release a new version via Git tag"
+    vars:
+      version: '{{.version| default ""}}'
+    preconditions:
+      - sh: "[ '{{.version}}' != '' ]"
+        msg: "Usage: go-task {{.TASK}} version=1.0.0"
+    cmds:
+      - git tag {{.version}}
+      - git push origin tag {{.version}}
+
+  release-delete:
+    desc: "Delete a release via Git tag removal"
+    vars:
+      version: '{{.version| default ""}}'
+    preconditions:
+      - sh: "[ '{{.version}}' != '' ]"
+        msg: "Usage: go-task {{.TASK}} version=1.0.0"
+    cmds:
+      - git tag -d {{.version}}
+      - git push --delete origin {{.version}}

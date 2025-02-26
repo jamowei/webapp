@@ -1,8 +1,8 @@
-import * as esbuild from 'esbuild';
-import { tailwindPlugin } from 'esbuild-plugin-tailwindcss';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as proc from 'child_process';
+import * as esbuild from "esbuild";
+import { tailwindPlugin } from "esbuild-plugin-tailwindcss";
+import * as fs from "fs";
+import * as path from "path";
+import * as proc from "child_process";
 
 /**
  * Main esbuild build-file.
@@ -12,15 +12,15 @@ import * as proc from 'child_process';
  * - build kubernetes manifest: node build.mjs k8s
  */
 
-const mainFile = 'app.tsx';
-const mainDir = 'src/main';
-const kubernetesFile = 'app.ts';
-const kubernetesDir = 'src/kubernetes';
-const resourceDir = 'src/resources';
-const excludes = ['*.jpg', '*.png', '*.svg', '*.webp', '*.ttf'];
-const outputDir = 'out';
-const serve = process.argv[2] === 'serve';
-const kubernetes = process.argv[2] === 'k8s';
+const mainFile = "app.tsx";
+const mainDir = "src/main";
+const kubernetesFile = "app.ts";
+const kubernetesDir = "src/kubernetes";
+const resourceDir = "src/resources";
+const excludes = ["*.jpg", "*.png", "*.svg", "*.webp", "*.ttf"];
+const outputDir = "out";
+const serve = process.argv[2] === "serve";
+const kubernetes = process.argv[2] === "k8s";
 
 // esbuild main config
 const mainConf = {
@@ -37,38 +37,37 @@ const mainConf = {
 const kubernetesConf = {
   entryPoints: [`${kubernetesDir}/${kubernetesFile}`],
   bundle: true,
-  platform: 'node',
-  packages: 'external',
-  outfile: 'temp.k8.js',
+  platform: "node",
+  packages: "external",
+  outfile: "temp.k8.js",
 };
 
 if (serve) {
-// serves the app (node build.mjs serve)
-// or builds it for production (node build.mjs)
+  // serves the app (node build.mjs serve)
+  // or builds it for production (node build.mjs)
   const ctx = await esbuild.context(mainConf);
   await ctx.watch();
-  const { host, port } = await ctx.serve({
+  const { hosts, port } = await ctx.serve({
     port: 3000,
     servedir: mainConf.outdir,
   });
-  console.log(`🚀 Serving at http://${host}:${port}/`);
-} else if(kubernetes) {
-// builds the kubernetes manifest for deployment
+  console.log(`🚀 Serving at http://${hosts[0]}:${port}/`);
+} else if (kubernetes) {
+  // builds the kubernetes manifest for deployment
   await esbuild.build(kubernetesConf);
-  proc.fork(kubernetesConf.outfile).on('exit', (code) => {
+  proc.fork(kubernetesConf.outfile).on("exit", (code) => {
     fs.unlinkSync(kubernetesConf.outfile);
   });
 } else {
   await esbuild.build(mainConf);
   await esbuild.stop();
-  
 }
 
 // copy static resources to output dir
 (function copyFiles(sourceDir, targetDir) {
   fs.readdir(sourceDir, (err, files) => {
     if (err) {
-      console.error('Error reading resource directory:', err);
+      console.error("Error reading resource directory:", err);
       return;
     }
     files.forEach((file) => {
