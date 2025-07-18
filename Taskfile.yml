@@ -36,7 +36,7 @@ tasks:
 
   docker-run:
     desc: "Run Docker container"
-    deps: [build]
+    deps: [docker-build]
     cmds:
       - docker run --name ${NAME} -dt --rm --init -p ${PORT}:3000 ${NAME}:latest > /dev/null
       - docker container ls

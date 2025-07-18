@@ -1,6 +1,6 @@
 ARG NODE_VERSION=22
-ARG BUSYBOX_VERSION=1.36.1
-ARG ALPINE_VERSION=3.20
+ARG BUSYBOX_VERSION=1.37.0
+ARG ALPINE_VERSION=3
 
 #################################################################
 ####################### esbuild #################################
@@ -55,8 +55,10 @@ COPY --from=httpd --chown=static /busybox/busybox_HTTPD httpd
 # Copy esbuild files
 COPY --from=esbuild --chown=static /esbuild/out .
 
+COPY --chown=static httpd.conf .
+
 # port httpd runs on
 EXPOSE 3000
 
 # Run busybox httpd
-CMD ["/home/static/httpd", "-f", "-p", "3000"]
+CMD ["/home/static/httpd", "-f", "-v", "-p", "3000", "-c", "httpd.conf"]
