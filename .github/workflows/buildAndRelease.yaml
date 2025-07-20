@@ -2,9 +2,9 @@ name: Build and Release
 
 on:
   pull_request:
-    branches: main
+    branches: ["main"]
   push:
-    branches: main
+    branches: ["main"]
     tags:
       - "*.*.*"
 
@@ -46,10 +46,11 @@ jobs:
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
-        
+
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/$NAME:$VERSION .
+          docker tag ghcr.io/${{ github.repository_owner }}/$NAME:$VERSION ghcr.io/${{ github.repository_owner }}/$NAME:latest
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -74,3 +75,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/$NAME:$VERSION
+          docker push ghcr.io/${{ github.repository_owner }}/$NAME:latest
