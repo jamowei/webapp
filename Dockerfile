@@ -59,6 +59,7 @@ COPY --chown=static httpd.conf .
 
 # port httpd runs on
 EXPOSE 3000
+STOPSIGNAL SIGINT
 
 # Run busybox httpd
 CMD ["/home/static/httpd", "-f", "-v", "-p", "3000", "-c", "httpd.conf"]
